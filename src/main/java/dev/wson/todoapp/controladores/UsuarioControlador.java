@@ -26,9 +26,13 @@ public class UsuarioControlador {
         }
     }
     @GetMapping
-    public ResponseEntity<List<Usuario>> listar() {
-        List<Usuario> usuarios = usuarioServico.listar();
-        return ResponseEntity.status(200).body(usuarios);
+    public ResponseEntity<Object> listar() {
+        try {
+            List<Usuario> usuarios = usuarioServico.listar();
+            return ResponseEntity.status(200).body(usuarios);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Erro no servidor");
+        }
     }
     @GetMapping("/{id}")
     public ResponseEntity<Object> buscarPorID(@PathVariable @NotBlank UUID id) {

@@ -19,9 +19,7 @@ public class UsuarioServico {
 
     public Usuario cadastrar(Usuario usuario) {
         Optional<Usuario> usuarioExistente = usuarioRepositorio.findByEmail(usuario.getEmail());
-        if (usuarioExistente.isPresent()) {
-            throw new ExcecaoGenerica("Já existe um usuário cadastrado com o email informado");
-        }
+        if (usuarioExistente.isPresent()) throw new ExcecaoGenerica("Já existe um usuário cadastrado com o email informado");
         String cifra = criptografia.cifrarSenha(usuario.getSenha());
         usuario.setSenha(cifra);
         return usuarioRepositorio.save(usuario);
@@ -31,16 +29,12 @@ public class UsuarioServico {
     }
     public Usuario buscarPorId(UUID id) {
         Optional<Usuario> usuario = usuarioRepositorio.findById(id);
-        if (usuario.isEmpty()) {
-            throw new ExcecaoGenerica("Usuário não encontrado");
-        }
+        if (usuario.isEmpty()) throw new ExcecaoGenerica("Usuário não encontrado");
         return usuario.get();
     }
     public Usuario atualizar(UUID id, Usuario usuario) {
-        Optional<Usuario> usuarioExistente = usuarioRepositorio.findById(id);
-        if (usuarioExistente.isEmpty()) {
-            throw new ExcecaoGenerica("Usuário não encontrado");
-        }
+        Optional<Usuario> tuplaUsuario = usuarioRepositorio.findById(id);
+        if (tuplaUsuario.isEmpty()) throw new ExcecaoGenerica("Usuário não encontrado");
         usuario.setId(id);
         String cifra = criptografia.cifrarSenha(usuario.getSenha());
         usuario.setSenha(cifra);
@@ -48,9 +42,7 @@ public class UsuarioServico {
     }
     public void excluir(UUID id) {
         Optional<Usuario> usuario = usuarioRepositorio.findById(id);
-        if (usuario.isEmpty()) {
-            throw new ExcecaoGenerica("Usuário não encontrado");
-        }
+        if (usuario.isEmpty()) throw new ExcecaoGenerica("Usuário não encontrado");
         usuarioRepositorio.deleteById(id);
     }
 }
